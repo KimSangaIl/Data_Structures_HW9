@@ -232,12 +232,35 @@ int deleteLeafNode(Node* head, int key)
 
 Node* searchRecursive(Node* ptr, int key)
 {
-	
+	if (ptr == NULL) return NULL;			//ptr노드가 비어있다면 NULL값을 반환하고 함수 종료
+
+	if (ptr->key > key) {				//노드의 키값이 입력 받은 키값보다 큰 경우
+		ptr = searchRecursive(ptr->left, key);	//왼쪽 서브 트리로 이동한 노드를 함수를 호출하여 탐색
+	}						//ptr노드를 탐색한 노드로 초기화
+	else if (ptr->key < key) {			//노드의 키값이 입력 받은 키값보다 작은 경우
+		ptr = searchRecursive(ptr->right, key);	//오른쪽 서브 트리로 이동한 노드를 함수를 호출하여 탐색
+	}						//ptr노드를 탐색한 노드로 초기화
+	//노드의 키값이 입력 받은 키값과 일치하는 경우
+	return ptr;	//ptr노드를 반환하고 함수 종료
 }
 
 Node* searchIterative(Node* head, int key)
 {
-	
+	Node* temp = head->left;	//탐색할 임시 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
+
+	while (temp != NULL) {			//임시 노드가 NULL이 될때까지 반복
+		if (temp->key == key) {		//임시 노드의 키값이 입력 받은 키값과 일치할 경우
+			return temp;		//임시 노드를 반환하고 함수 종료
+		}
+		if (temp->key > key) {		//임시 노드의 키값이 입력 받은 키값보다 큰 경우
+			temp = temp->left;	//임시 노드를 왼쪽 서브 트리로 이동
+		}
+		else {				//임시 노드의 키값이 입력 받은 키값보다 작은 경우
+			temp = temp->right;	//임시 노드를 오른쪽 서브 트리로 이동
+		}
+	}
+
+	return NULL;	//모든 트리 탐색 후 입력 받은 키값을 찾지 못하면 NULL값을 반환하고 함수 종료
 }
 
 int freeBST(Node* head)
