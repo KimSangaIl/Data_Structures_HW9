@@ -31,6 +31,8 @@ int freeBST(Node* head); /* free all memories allocated to the tree */
 
 /* you may add your own defined functions if necessary */
 
+void freeNode(Node* temp);	//노드의 메모리를 해제하는 함수 선언
+
 int main()
 {
 	printf("[----- [Kim Sangil] [2019038041] -----]\n");
@@ -265,5 +267,23 @@ Node* searchIterative(Node* head, int key)
 
 int freeBST(Node* head)
 {
+	if (head->left == head) {	//트리에 헤드 노드만 존재하는 경우
+		free(head);		//헤드 노드의 메모리 해제
+		return 1;		//함수 종료
+	}
 
+	Node* temp = head->left;	//임시 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
+	freeNode(temp);			//함수를 호출하여 임시 노드의 메모리 해제
+	free(head);			//헤드 노드의 메모리 해제
+
+	return 1;			//모든 메모리 해제 후 함수 종료
+}
+
+void freeNode(Node* temp)
+{
+	if (temp) {			//temp노드에 값이 있는 경우
+		freeNode(temp->left);	//왼쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
+		freeNode(temp->right);	//오른쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
+		free(temp);		//좌우 서브 트리의 모든 메모리 해제 후 temp노드의 메모리 해제
+	}
 }
