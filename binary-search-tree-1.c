@@ -265,6 +265,15 @@ Node* searchIterative(Node* head, int key)
 	return NULL;	//모든 트리 탐색 후 입력 받은 키값을 찾지 못하면 NULL값을 반환하고 함수 종료
 }
 
+void freeNode(Node* temp)
+{
+	if (temp) {			//temp노드에 값이 있는 경우
+		freeNode(temp->left);	//왼쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
+		freeNode(temp->right);	//오른쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
+		free(temp);		//좌우 서브 트리의 모든 메모리 해제 후 temp노드의 메모리 해제
+	}
+}
+
 int freeBST(Node* head)
 {
 	if (head->left == head) {	//트리에 헤드 노드만 존재하는 경우
@@ -277,13 +286,4 @@ int freeBST(Node* head)
 	free(head);			//헤드 노드의 메모리 해제
 
 	return 1;			//모든 메모리 해제 후 함수 종료
-}
-
-void freeNode(Node* temp)
-{
-	if (temp) {			//temp노드에 값이 있는 경우
-		freeNode(temp->left);	//왼쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
-		freeNode(temp->right);	//오른쪽 서브 트리로 이동 후 함수를 호출해 메모리 해제
-		free(temp);		//좌우 서브 트리의 모든 메모리 해제 후 temp노드의 메모리 해제
-	}
 }
