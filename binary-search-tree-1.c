@@ -153,7 +153,36 @@ void postorderTraversal(Node* ptr)
 
 int insert(Node* head, int key)
 {
-	
+	Node* new = (Node*)malloc(sizeof(Node));	//삽입할 노드를 저장할 변수 동적 할당
+	new->key = key;		//새 노드의 키값을 입력 받은 키값으로 초기화
+	new->left = NULL;
+	new->right = NULL;	//새 노드의 좌우 서브 트리 링크를 NULL로 초기화
+
+	if (head->left == NULL) {	//헤드 노드의 왼쪽 서브 트리가 비어있는 경우
+		head->left = new;		//왼쪽 서브 트리에 새 노드를 추가
+		return 1;				//함수 종료
+	}
+
+	Node* temp = head->left;	//새 노드를 삽입하기 위해 탐색할 임시 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
+	Node* ptemp = NULL;			//임시 노드의 부모 노드를 지정할 노드 선언 및 NULL로 초기화
+
+	while (temp != NULL) {		//임시 노드가 NULL이 될때까지 반복
+		if (temp->key == key) {	//임시 노드의 키값이 입력 받은 키값과 같은 경우
+			return 1;			//입력 받은 키값이 이미 존재하기 때문에 함수 종료	
+		}
+		ptemp = temp;			//ptemp노드를 임시 노드로 초기화
+		if (temp->key > key) {	//임시 노드의 키값이 입력 받은 키값보다 큰 경우
+			temp = temp->left;	//임시 노드를  왼쪽 서브 트리로 이동
+		}
+		else temp = temp->right;//키값이 작은 경우 오른쪽 서브 트리로 이동
+	}
+
+	if (ptemp->key > key) {		//ptemp노드의 키값이 입력 받은 키값보다 큰 경우
+		ptemp->left = new;		//ptemp노드의 왼쪽 서브 트리에 새 노드 추가
+	}
+	else ptemp->right = new;	//키값이 작은 경우 오른쪽 서브 트리에 새 노드 추가
+
+	return 1;	//함수 종료
 }
 
 int deleteLeafNode(Node* head, int key)
