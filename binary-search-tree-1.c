@@ -126,17 +126,17 @@ int initializeBST(Node** h) {
 
 void inorderTraversal(Node* ptr)
 {
-	if (ptr) {							//노드에 값이 있는 경우
+	if (ptr) {				//노드에 값이 있는 경우
 		inorderTraversal(ptr->left);	//왼쪽 서브 트리로 이동하여 함수 호출
-		printf(" [%d] ", ptr->key);		//노드의 키값을 출력
+		printf(" [%d] ", ptr->key);	//노드의 키값을 출력
 		inorderTraversal(ptr->right);	//오른쪽 서브 트리로 이동하여 함수 호출
 	}
 }
 
 void preorderTraversal(Node* ptr)
 {
-	if (ptr) {							//노드에 값이 있는 경우
-		printf(" [%d] ", ptr->key);		//노드의 키값을 출력
+	if (ptr) {				//노드에 값이 있는 경우
+		printf(" [%d] ", ptr->key);	//노드의 키값을 출력
 		preorderTraversal(ptr->left);	//왼쪽 서브 트리로 이동하여 함수 호출
 		preorderTraversal(ptr->right);	//오른쪽 서브 트리로 이동하여 함수 호출
 	}
@@ -147,7 +147,7 @@ void postorderTraversal(Node* ptr)
 	if (ptr) {
 		postorderTraversal(ptr->left);	//왼쪽 서브 트리로 이동하여 함수 호출
 		postorderTraversal(ptr->right);	//오른쪽 서브 트리로 이동하여 함수 호출
-		printf(" [%d] ", ptr->key);		//노드의 키값을 출력
+		printf(" [%d] ", ptr->key);	//노드의 키값을 출력
 	}
 }
 
@@ -159,26 +159,26 @@ int insert(Node* head, int key)
 	new->right = NULL;	//새 노드의 좌우 서브 트리 링크를 NULL로 초기화
 
 	if (head->left == NULL) {	//헤드 노드의 왼쪽 서브 트리가 비어있는 경우
-		head->left = new;		//왼쪽 서브 트리에 새 노드를 추가
-		return 1;				//함수 종료
+		head->left = new;	//왼쪽 서브 트리에 새 노드를 추가
+		return 1;		//함수 종료
 	}
 
 	Node* temp = head->left;	//새 노드를 삽입하기 위해 탐색할 임시 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
-	Node* ptemp = NULL;			//임시 노드의 부모 노드를 지정할 노드 선언 및 NULL로 초기화
+	Node* ptemp = NULL;		//임시 노드의 부모 노드를 지정할 노드 선언 및 NULL로 초기화
 
 	while (temp != NULL) {		//임시 노드가 NULL이 될때까지 반복
 		if (temp->key == key) {	//임시 노드의 키값이 입력 받은 키값과 같은 경우
-			return 1;			//입력 받은 키값이 이미 존재하기 때문에 함수 종료	
+			return 1;	//입력 받은 키값이 이미 존재하기 때문에 함수 종료	
 		}
 		ptemp = temp;			//ptemp노드를 임시 노드로 초기화
-		if (temp->key > key) {	//임시 노드의 키값이 입력 받은 키값보다 큰 경우
+		if (temp->key > key) {		//임시 노드의 키값이 입력 받은 키값보다 큰 경우
 			temp = temp->left;	//임시 노드를  왼쪽 서브 트리로 이동
 		}
-		else temp = temp->right;//키값이 작은 경우 오른쪽 서브 트리로 이동
+		else temp = temp->right;	//키값이 작은 경우 오른쪽 서브 트리로 이동
 	}
 
 	if (ptemp->key > key) {		//ptemp노드의 키값이 입력 받은 키값보다 큰 경우
-		ptemp->left = new;		//ptemp노드의 왼쪽 서브 트리에 새 노드 추가
+		ptemp->left = new;	//ptemp노드의 왼쪽 서브 트리에 새 노드 추가
 	}
 	else ptemp->right = new;	//키값이 작은 경우 오른쪽 서브 트리에 새 노드 추가
 
@@ -187,7 +187,47 @@ int insert(Node* head, int key)
 
 int deleteLeafNode(Node* head, int key)
 {
-	
+	if (head == NULL) {			//헤드 노드가 비어있는 경우
+		printf("Nothing to delete!\n");	//오류 메시지 출력
+		return -1;			//비정상 함수 종료
+	}
+
+	if (head->left == NULL) {		//헤드 노드의 왼쪽 서브 트리가 비어있는 경우
+		printf("Nothing to delete!\n");	//오류 메시지 출력
+		return -1;			//비정상 함수 종료
+	}
+
+	Node* temp = head->left;	//노드를 삭제하기 위해 탐색할 임시 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
+	Node* ptemp = NULL;		//임시 노드의 부모 노드를 지정할 노드 선언 및 NULL로 초기화
+
+	while (temp != NULL) {		//임시 노드가 NULL이 될때까지 반복
+		if (temp->key == key) {	//임시 노드의 키값이 입력 받은 키값과 같은 경우
+			if (temp->left == NULL && temp->right == NULL) {	//임시 노드의 좌우 서브 트리가 비어있는 경우
+				if (ptemp == head) {		//ptemp노드가 헤드 노드인 경우
+					head->left = NULL;	//헤드 노드의 왼쪽 서브 트리를 NULL로 초기화
+				}
+				if (ptemp->left == temp) {	//ptemp노드의 왼쪽 서브 트리가 임시 노드인 경우
+					ptemp->left = temp;	//ptemp노드의 왼쪽 서브 트리를 임시 노드로 초기화
+				}
+				else {				//ptemp노드의 오른쪽 서브 트리가 임시 노드인 경우
+					ptemp->right = temp;	//ptemp노드의 오른쪽 서브 트리를 임시 노드로 초기화
+				}
+				free(temp);			//임시 노드의 메모리를 해제
+			}
+			else {		//임시 노드의 좌우 서브 트리가 비어있지 않은 경우
+				printf("Node %d is not a leaf\n", temp->key);	//리프 노드가 아니라는 메시지 출력
+			}
+			return 1;	//함수 종료
+		}
+		ptemp = temp;			//ptemp노드를 임시 노드로 초기화
+		if (temp->key > key) {		//임시 노드의 키값이 입력 받은 키값보다 큰 경우
+			temp = temp->left;	//임시 노드를  왼쪽 서브 트리로 이동
+		}
+		else temp = temp->right;	//키값이 작은 경우 오른쪽 서브 트리로 이동
+	}
+	//모든 트리 탐색 후 입력 받은 키값을 찾지 못한 경우
+	printf("Can't find the node for key %d", key);	//입력 받은 키값과 일치하는 노드를 찾지 못했다는 메시지 출력
+	return 1;	//함수 종료	
 }
 
 Node* searchRecursive(Node* ptr, int key)
